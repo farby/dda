@@ -28,11 +28,14 @@ public class Sistema {
     }
     
     public boolean modificarPersona(int cedula, String nombre, int edad){
+        Persona unaPersona = new Persona(nombre, edad, cedula);
+        int i = 0;
         boolean ok = false;
-        //Persona unaPersona = ;
-        if (!this.getLstPersonas().contains(unaPersona)){
-            this.getLstPersonas().add(unaPersona);
-            ok = true;
+        while(i < this.getLstPersonas().size() && !ok){
+            if(this.getLstPersonas().get(i).equals(unaPersona)){
+                this.getLstPersonas().set(i, unaPersona);
+                ok = true;
+            }
         }
         return ok;
     }

@@ -13,6 +13,7 @@ public class AltaPersonas extends javax.swing.JFrame {
     public AltaPersonas(Sistema unModelo) {
         initComponents();
         this.modelo = unModelo;
+        this.btnModificar.setEnabled(false);
     }
     
     
@@ -36,6 +37,7 @@ public class AltaPersonas extends javax.swing.JFrame {
         lblTitulo = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         lstPersonas = new javax.swing.JList();
+        btnModificar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -63,15 +65,24 @@ public class AltaPersonas extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(lstPersonas);
 
+        btnModificar.setText("Modificar");
+        btnModificar.setActionCommand("Modificar");
+        btnModificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModificarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(btnAgregar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnModificar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnAgregar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(lblEdad, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(lblNombre, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -81,17 +92,16 @@ public class AltaPersonas extends javax.swing.JFrame {
                             .addComponent(txtEdad)
                             .addComponent(txtNombre)
                             .addComponent(txtCedula)))
-                    .addComponent(lblTitulo, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE)
-                .addContainerGap())
+                    .addComponent(lblTitulo, javax.swing.GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(lblTitulo)
                         .addGap(18, 18, 18)
@@ -107,7 +117,11 @@ public class AltaPersonas extends javax.swing.JFrame {
                             .addComponent(txtEdad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblEdad))
                         .addGap(18, 18, 18)
-                        .addComponent(btnAgregar)))
+                        .addComponent(btnAgregar)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnModificar)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1))
                 .addContainerGap())
         );
 
@@ -119,20 +133,43 @@ public class AltaPersonas extends javax.swing.JFrame {
         String nombre = this.txtNombre.getText();
         int edad = Integer.parseInt(this.txtEdad.getText());
         if(modelo.agregarPersona(cedula, nombre, edad)){
-            JOptionPane.showMessageDialog(null, "ok");
             this.lstPersonas.setListData(modelo.getLstPersonas().toArray());
+            this.txtCedula.setText("");
+            this.txtNombre.setText("");
+            this.txtEdad.setText("");
         }
         else{
             JOptionPane.showMessageDialog(null, "ya existe");
-
         }
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void lstPersonasValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstPersonasValueChanged
-        //this.txtNombre.setText(((Persona)this.lstPersonas.getSelectedValue()).getNombre());
-        this.txtNombre.setText(((Persona)this.lstPersonas.getSelectedValue()).getNombre());
-        //this.txtEdad.setText(((Persona)this.lstPersonas.getSelectedValue()).getEdad());
+        Persona unaPersona = (Persona)this.lstPersonas.getSelectedValue();
+        this.txtCedula.setText(Integer.toString(unaPersona.getCedula()));
+        this.txtCedula.setEnabled(false);   
+        this.txtNombre.setText(unaPersona.getNombre());
+        this.txtEdad.setText(Integer.toString(unaPersona.getEdad()));
+        this.btnAgregar.setEnabled(false);
+        this.btnModificar.setEnabled(true);
     }//GEN-LAST:event_lstPersonasValueChanged
+
+    private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
+        this.txtCedula.setEnabled(true);
+        this.btnAgregar.setEnabled(true);
+        this.btnModificar.setEnabled(false);
+        int cedula = Integer.parseInt(this.txtCedula.getText());
+        String nombre = this.txtNombre.getText();
+        int edad = Integer.parseInt(this.txtEdad.getText());
+        if(modelo.modificarPersona(cedula, nombre, edad)){
+            this.lstPersonas.setListData(modelo.getLstPersonas().toArray());
+            this.txtCedula.setText("");
+            this.txtNombre.setText("");
+            this.txtEdad.setText("");
+        }
+        else{
+            JOptionPane.showMessageDialog(null, "no se pudo modificar");
+        }
+    }//GEN-LAST:event_btnModificarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -172,6 +209,7 @@ public class AltaPersonas extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
+    private javax.swing.JButton btnModificar;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblCedula;
     private javax.swing.JLabel lblEdad;
