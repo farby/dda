@@ -18,8 +18,10 @@ public class Inicio {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Sistema unSistema = new Sistema();
-        AltaPersonas ventana = new AltaPersonas(unSistema);
+        ControladorSemaforos unSistema = new ControladorSemaforos();
+        frmSemaforos ventana = new frmSemaforos(unSistema);
+        /*Sistema unSistema = new Sistema();
+        AltaPersonas ventana = new AltaPersonas(unSistema);*/
         ventana.setVisible(true);
     }
     
