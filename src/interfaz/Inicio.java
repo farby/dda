@@ -19,10 +19,11 @@ public class Inicio {
      */
     public static void main(String[] args) {
         ControladorSemaforos unSistema = new ControladorSemaforos();
-        frmSemaforos ventana = new frmSemaforos(unSistema);
+        Menu menu = new Menu(unSistema);
+        //FrmAltaSemaforo alta = new FrmAltaSemaforo(unSistema);
         /*Sistema unSistema = new Sistema();
         AltaPersonas ventana = new AltaPersonas(unSistema);*/
-        ventana.setVisible(true);
+        menu.setVisible(true);
     }
     
 }
